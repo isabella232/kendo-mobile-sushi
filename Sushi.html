@@ -213,10 +213,11 @@
         }
 
         function removeItemFromList(e) {
-            var item = ds.get(e.button.data("itemId"));
+            var item = ds.get(e.button.data("itemId")),
+                currentView = app.view();
 
             cartDataSource.remove(item);
-            app.view.scroller.reset();
+            currentView.scroller.reset();
             e.preventDefault();
         }
 
