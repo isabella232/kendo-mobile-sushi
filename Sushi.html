@@ -29,8 +29,7 @@
     </div>
 
     <div data-title="Kendo sushi" data-role="view" id="index" data-url="/" data-layout="default" data-show="showMenuView">
-        <ul
-            id="featured"
+        <ul id="featured"
             class="item-list"
             data-role="listview"
             data-template="menuTemplate"
@@ -39,8 +38,7 @@
     </div>
 
     <div data-role="view" id="menu" data-layout="default" data-title="Menu" data-show="showMenuView">
-        <ul
-            id="menuList"
+        <ul id="menuList"
             class="item-list"
             data-role="listview"
             data-template="menuTemplate"
@@ -52,12 +50,13 @@
         <h2 id="total"></h2>
         <img src="content/images/sad.png" id="empty-icon">
         <a id="checkout" data-click="checkout" class="red-button" href="#done" data-role="button">Checkout</a>
-        <ul id="cartList" class="item-list"
+        <ul id="cartList" 
+            class="item-list"
             data-template="cartItemTemplate"
             data-source="cartDataSource"
             data-role="listview"
             data-style="inset"
-            ></ul>
+        ></ul>
     </div>
 
     <div data-role="view" id="account" data-layout="default" data-title="My Account">
@@ -80,7 +79,10 @@
     </div>
 
     <div data-role="view" id="done" data-transition="zoom">
-        <header data-role="header"> <div data-role="navbar"> <span data-role="view-title">Done!</span> </div>
+        <header data-role="header"> 
+            <div data-role="navbar"> 
+                <span data-role="view-title">Done!</span> 
+            </div>
         </header>
         <div data-role="content" class="km-insetcontent">
             <img src="content/images/happy.png" id="done-icon">
@@ -92,10 +94,10 @@
 
     <div data-role="view" id="details" data-transition="slide" data-layout="default" data-show="showDetailsView">
         <header data-role="header">
-        <div data-role="navbar">
-            <a data-role="backbutton" data-align="left">Back</a>
-            <span data-role="view-title">Item</span>
-        </div>
+            <div data-role="navbar">
+                <a data-role="backbutton" data-align="left">Back</a>
+                <span data-role="view-title">Item</span>
+            </div>
         </header>
 
         <div data-role="content">
