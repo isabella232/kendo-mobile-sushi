@@ -165,7 +165,7 @@
             aggregate: [{ field: "price", aggregate: "sum" }]
         });
 
-        cartDataSource.read();
+        //cartDataSource.read();
 
         cartDataSource.bind("change", function() {
             var emptyCart = cartDataSource.aggregates().price === undefined;
