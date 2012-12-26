@@ -29,7 +29,6 @@
         }
     });
 
-    var app;
     var schema = {
         model: {
             fields: {
@@ -96,12 +95,13 @@
     var cartViewModel = kendo.observable({
         added: new kendo.data.DataSource(),
         removeItem: function(e) {
-            var item = e.data;
+            var item = e.data,
+                currentView = app.view();
 
             item.set("ordered", 0);
             this.added.remove(item);
 
-            app.view.scroller.reset();
+            currentView.scroller.reset();
             e.preventDefault();
         },
         checkout: function() {
