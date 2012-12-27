@@ -61,7 +61,7 @@
         init: function() {
             var that = this;
             ds.one("change", function() {
-                that.all.data(this.data());
+                that.all.data(this.data().toJSON());
             }).fetch();
         }
     });
@@ -86,10 +86,23 @@
         added: new kendo.data.DataSource(),
         removeItem: function(e) {
             var item = e.data,
-                currentView = app.view();
+                currentView = app.view(),
+                featured = homeViewModel.get("featured"), //observable array
+                all = menuViewModel.all; //dataSource instance
 
+            //reset ordered numver in cart list
             item.set("ordered", 0);
             this.added.remove(item);
+
+            //reset ordered number in featured list
+            for(var i = 0; i < featured.length; i++) {
+                if(featured[i].id === item.id) {
+                    featured[i].set("ordered", 0);
+                }
+            }
+
+            //reset ordered numver in list of all products
+            all.get(item.id).set("ordered", 0);
 
             currentView.scroller.reset();
             e.preventDefault();
