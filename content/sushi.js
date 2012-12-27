@@ -56,6 +56,10 @@
     function showMenuView() {
         viewModel.dataSource.filter([]);
         viewModel.dataSource.group({field: "category"});
+    } 
+    
+    function showCartView() {
+        viewModel.showCheckout();
     }
 
     function addToCart(e) {
@@ -82,7 +86,13 @@
     }
 
     function showCheckout(e) {
+        var button = $("#checkout");
 
+        if (this.added.length) {
+            button.show();
+        } else {
+            button.hide();
+        }
     }
 
     var ds = new kendo.data.DataSource({
@@ -165,14 +175,7 @@
             }, 400);
         },
         showCheckout: function() {
-            var button = $("#checkout");
-
-            if (this.added.data()[0]) {
-                button.show();
-            } else {
-                button.hide();
-            }
-        }
+                    }
     });
 
     //detail view model
@@ -203,10 +206,6 @@
 
     function initMenuView() {
         menuViewModel.init();
-    }
-
-    function showCartView() {
-        cartViewModel.showCheckout();
     }
 
     function showDetailsView(e) {
