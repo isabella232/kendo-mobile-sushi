@@ -30,23 +30,24 @@
         </footer>
     </div>
 
-    <div data-title="Kendo sushi" data-role="view" id="index" data-url="/" data-layout="default" data-model="homeViewModel" data-init="initHomeView">
+    <div data-title="Kendo sushi" data-role="view" id="index" data-url="/" data-layout="default" data-model="viewModel" data-before-show="showHomeView">
         <ul
             id="featured"
             class="item-list"
+            data-type="flat"
             data-role="listview"
             data-template="menuTemplate"
-            data-bind="source: featured"
+            data-bind="source: dataSource"
         ></ul>
     </div>
 
-    <div data-title="Menu" data-role="view" id="menu" data-layout="default" data-model="menuViewModel" data-init="initMenuView">
+    <div data-title="Menu" data-role="view" id="menu" data-layout="default" data-model="viewModel" data-show="showMenuView">
         <ul
             id="menuList"
             class="item-list"
             data-role="listview"
             data-template="menuTemplate"
-            data-bind="source: all"
+            data-bind="source: dataSource"
         ></ul>
     </div>
 

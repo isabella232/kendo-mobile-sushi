@@ -28,6 +28,46 @@
             }
         }
     });
+    
+    //viewModel
+    var viewModel = kendo.observable({
+        dataSource: new kendo.data.DataSource({
+            transport: { 
+                read: { 
+                    url: "content/menu.json", 
+                    dataType: "json" 
+                } 
+            }
+        }),
+        added: [],
+        currentItem: null,
+        addToCart: addToCart,
+        removeItem: removeItem,
+        checkout: checkout,
+        showCheckout: showCheckout
+    });
+
+    function showHomeView(e) {
+        viewModel.dataSource.group([]);
+        viewModel.dataSource.filter({ field: "featured", operator: "eq", value: true});
+    }
+
+    function showMenuView() {
+        viewModel.dataSource.filter([]);
+        viewModel.dataSource.group({field: "category"});
+    }
+
+    function removeItem(e) {
+        
+    }
+
+    function checkout(e) {
+        
+    }
+
+    function showCheckout(e) {
+
+    }
 
     var ds = new kendo.data.DataSource({
         transport: { 
@@ -182,9 +222,10 @@
         menuViewModel: menuViewModel,
         cartViewModel: cartViewModel,
         detailViewModel: detailViewModel,
-        initHomeView: initHomeView,
-        initMenuView: initMenuView,
+        showHomeView: showHomeView,
+        showMenuView: showMenuView,
         showCartView: showCartView,
-        showDetailsView: showDetailsView
+        showDetailsView: showDetailsView,
+        viewModel: viewModel 
     });
 })(jQuery);
