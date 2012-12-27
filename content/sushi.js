@@ -58,6 +58,21 @@
         viewModel.dataSource.group({field: "category"});
     }
 
+    function addToCart(e) {
+        var item = e.data,
+            ordered = item.get("ordered") || 0;
+
+        ordered += 1;
+
+        item.set("ordered", ordered);
+
+        if (ordered === 1) {
+            this.added.push(item);
+        }
+
+        e.preventDefault();
+    }
+
     function removeItem(e) {
         
     }
@@ -107,20 +122,7 @@
         }
     });
 
-    function addToCart(e) {
-        var item = e.data,
-            ordered = item.get("ordered") || 0;
 
-        ordered += 1;
-
-        item.set("ordered", ordered);
-
-        if (ordered === 1) {
-            cartViewModel.added.add(item.toJSON());
-        }
-
-        e.preventDefault();
-    }
 
     //cart view model
     var cartViewModel = kendo.observable({
