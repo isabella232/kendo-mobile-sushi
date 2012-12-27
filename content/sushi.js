@@ -29,23 +29,13 @@
         }
     });
 
-    var schema = {
-        model: {
-            fields: {
-                id: {},
-                name: {},
-                price: {},
-                image: {},
-                category: {},
-                description: {},
-                featured: {},
-                ordered: {}
-            }
+    var ds = new kendo.data.DataSource({
+        transport: { 
+            read: { 
+                url: "content/menu.json", 
+                dataType: "json" 
+            } 
         }
-    };
-    var ds = kendo.data.DataSource.create({
-        schema: schema,
-        transport: { read: { url: "content/menu.json", dataType: "json" } }
     });
 
     //home view model
