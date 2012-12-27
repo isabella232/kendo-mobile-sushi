@@ -44,7 +44,8 @@
         addToCart: addToCart,
         removeItem: removeItem,
         checkout: checkout,
-        showCheckout: showCheckout
+        showCheckout: showCheckout,
+        showLabel: showLabel
     });
 
     function showHomeView(e) {
@@ -63,9 +64,16 @@
     }
 
     function addToCart(e) {
-        var item = e.data,
-            ordered = item.get("ordered") || 0;
+        var item,
+            ordered;
 
+        if(e.data.id) {
+            item = e.data     
+        } else {
+            item = this.get("currentItem");
+        }
+
+        ordered = item.get("ordered") || 0;
         ordered += 1;
 
         item.set("ordered", ordered);
@@ -112,89 +120,10 @@
             button.hide();
         }
     }
-
-    var ds = new kendo.data.DataSource({
-        transport: { 
-            read: { 
-                url: "content/menu.json", 
-                dataType: "json" 
-            } 
-        }
-    });
-
-    //home view model
-    var homeViewModel = kendo.observable({
-        featured: [],
-        addToCart: addToCart,
-        init: function() {
-            var that = this;
-
-            ds.one("change", function() {
-                that.set("featured", this.view());
-            })
-            .filter({ field: "featured", operator: "eq", value: true});
-        }
-    });
-
-    //menu view model
-    var menuViewModel = kendo.observable({
-        all: new kendo.data.DataSource({
-            group: "category"
-        }),
-        addToCart: addToCart,
-        init: function() {
-            var that = this;
-            ds.one("change", function() {
-                that.all.data(this.data().toJSON());
-            }).fetch();
-        }
-    });
-
-
-
-    //cart view model
-    var cartViewModel = kendo.observable({
-        added: new kendo.data.DataSource(),
-        removeItem: function(e) {
-            var item = e.data,
-                currentView = app.view(),
-                featured = homeViewModel.get("featured"), //observable array
-                all = menuViewModel.all; //dataSource instance
-
-            //reset ordered numver in cart list
-            item.set("ordered", 0);
-            this.added.remove(item);
-
-            //reset ordered number in featured list
-            for(var i = 0; i < featured.length; i++) {
-                if(featured[i].id === item.id) {
-                    featured[i].set("ordered", 0);
-                }
-            }
-
-            //reset ordered numver in list of all products
-            all.get(item.id).set("ordered", 0);
-
-            currentView.scroller.reset();
-            e.preventDefault();
-        },
-        checkout: function() {
-            var dataSource = this.added,
-                items = dataSource.data(),
-                length = items.length,
-                idx = 0;
-
-            setTimeout(function () {
-                for (; idx < length; idx++) {
-                    items[0].set("ordered", 0);
-                }
-
-                dataSource.data([])
-            }, 400);
-        },
-        showCheckout: function() {
-                    }
-    });
+    
+    function showLabel() {
+        return this.get("currentItem") && this.get("currentItem").get("ordered") > 0;
+    }
 
     //detail view model
     var detailViewModel = kendo.observable({
@@ -213,34 +142,16 @@
 
             e.preventDefault();
         },
-        showLabel: function() {
-            return this.get("currentItem") && this.get("currentItem").get("ordered") > 0;
-        }
     });
 
-    function initHomeView() {
-        homeViewModel.init();
-    }
-
-    function initMenuView() {
-        menuViewModel.init();
-    }
-
     function showDetailsView(e) {
-        var view = e.view;
+        var id = parseInt(e.view.params.id),
+            item = viewModel.dataSource.get(id);
 
-        ds.fetch(function() {
-            var model = view.model,
-                item = ds.get(view.params.id);
-
-            model.set("currentItem", item);
-        });
+        viewModel.set("currentItem", item);
     }
 
     $.extend(window, {
-        homeViewModel: homeViewModel,
-        menuViewModel: menuViewModel,
-        cartViewModel: cartViewModel,
         detailViewModel: detailViewModel,
         showHomeView: showHomeView,
         showMenuView: showMenuView,
