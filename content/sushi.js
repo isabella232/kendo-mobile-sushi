@@ -49,6 +49,7 @@
 
     function showHomeView(e) {
         viewModel.dataSource.group([]);
+        $("#featured").data("kendoMobileListView").options.type = "flat";
         viewModel.dataSource.filter({ field: "featured", operator: "eq", value: true});
     }
 
