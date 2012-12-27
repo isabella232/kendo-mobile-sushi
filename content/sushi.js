@@ -78,7 +78,15 @@
     }
 
     function removeItem(e) {
-        
+        var item = e.data,
+        index = viewModel.added.indexOf(item),
+        currentView = app.view();
+
+        item.set("ordered", 0);
+        viewModel.added.splice(index, 1);
+
+        currentView.scroller.reset();
+        e.preventDefault();
     }
 
     function checkout(e) {
