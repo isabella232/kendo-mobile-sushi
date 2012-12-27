@@ -85,7 +85,7 @@
         item.set("ordered", ordered);
 
         if (ordered === 1) {
-            cartViewModel.added.add(item);
+            cartViewModel.added.add(item.toJSON());
         }
 
         e.preventDefault();
@@ -141,7 +141,7 @@
             item.set("ordered", ordered);
 
             if (ordered === 1) {
-                cartViewModel.added.add(item);
+                cartViewModel.added.add(item.toJSON());
             }
 
             e.preventDefault();
