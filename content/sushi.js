@@ -79,8 +79,8 @@
 
     function removeItem(e) {
         var item = e.data,
-        index = viewModel.added.indexOf(item),
-        currentView = app.view();
+            index = viewModel.added.indexOf(item),
+            currentView = app.view();
 
         item.set("ordered", 0);
         viewModel.added.splice(index, 1);
@@ -90,7 +90,17 @@
     }
 
     function checkout(e) {
-        
+        var that = this,
+            dataSourceData = this.dataSource.data(),
+            length = dataSourceData.length;
+
+        setTimeout(function () {
+            for (idx = 0; idx < length; idx++) {
+                dataSourceData[idx].set("ordered", 0);
+            }
+
+            that.set("added", []);
+        }, 400);
     }
 
     function showCheckout(e) {
