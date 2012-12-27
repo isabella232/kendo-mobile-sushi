@@ -125,25 +125,6 @@
         return this.get("currentItem") && this.get("currentItem").get("ordered") > 0;
     }
 
-    //detail view model
-    var detailViewModel = kendo.observable({
-        currentItem: null,
-        addToCart: function(e) {
-            var item = this.currentItem,
-                ordered = item.get("ordered") || 0;
-
-            ordered += 1;
-
-            item.set("ordered", ordered);
-
-            if (ordered === 1) {
-                cartViewModel.added.add(item.toJSON());
-            }
-
-            e.preventDefault();
-        },
-    });
-
     function showDetailsView(e) {
         var id = parseInt(e.view.params.id),
             item = viewModel.dataSource.get(id);
@@ -152,7 +133,6 @@
     }
 
     $.extend(window, {
-        detailViewModel: detailViewModel,
         showHomeView: showHomeView,
         showMenuView: showMenuView,
         showCartView: showCartView,
