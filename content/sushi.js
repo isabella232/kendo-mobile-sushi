@@ -45,7 +45,8 @@
         removeItem: removeItem,
         checkout: checkout,
         showCheckout: showCheckout,
-        showLabel: showLabel
+        showLabel: showLabel,
+        showTotal: showTotal
     });
 
     function showHomeView(e) {
@@ -130,6 +131,15 @@
             item = viewModel.dataSource.get(id);
 
         viewModel.set("currentItem", item);
+    }
+
+    function showTotal() {
+        var cartItems = this.get("added"),
+            total = 0;
+        for(var idx = 0; idx < cartItems.length; idx++) {
+            total += cartItems[idx].ordered * cartItems[idx].price;
+        }
+        return kendo.toString(total, "c");
     }
 
     $.extend(window, {

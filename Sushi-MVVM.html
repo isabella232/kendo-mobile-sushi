@@ -52,7 +52,7 @@
     </div>
 
     <div data-role="view" id="cart" data-layout="default" data-title="Cart" data-model="viewModel" data-show="showCartView">
-        <h2 id="total"></h2>
+        <h2 id="total" data-bind="text: showTotal"></h2>
         <img src="content/images/sad.png" id="empty-icon">
         <a id="checkout" data-bind="click: checkout" class="red-button" href="#done" data-role="button">Checkout</a>
         <ul id="cartList"
