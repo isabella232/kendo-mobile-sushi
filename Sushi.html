@@ -152,14 +152,14 @@
 
         var schema = {model: {}};
 
-        var ds = kendo.data.DataSource.create({
+        var ds = new kendo.data.DataSource({
             schema: schema,
             transport: { read: { url: "content/menu.json", dataType: "json" } },
             group: "category",
             error: function() { console.log(arguments); }
         });
 
-        var cartDataSource = kendo.data.DataSource.create({
+        var cartDataSource = new kendo.data.DataSource({
             data: [],
             schema: schema,
             aggregate: [{ field: "price", aggregate: "sum" }]
@@ -179,7 +179,7 @@
             $("#cart .km-content").toggleClass("km-empty", emptyCart);
         });
 
-        var featured = kendo.data.DataSource.create({
+        var featured = new kendo.data.DataSource({
             schema: schema,
             filter: {
                 field: "featured",
