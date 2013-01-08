@@ -30,31 +30,33 @@
         </footer>
     </div>
 
-    <div data-title="Kendo sushi" data-role="view" id="index" data-url="/" data-layout="default" data-model="homeViewModel" data-init="initHomeView">
+    <div data-title="Kendo sushi" data-role="view" id="index" data-url="/" data-layout="default" data-model="viewModel" data-before-show="showHomeView">
         <ul
             id="featured"
             class="item-list"
+            data-type="flat"
             data-role="listview"
             data-template="menuTemplate"
-            data-bind="source: featured"
+            data-bind="source: dataSource"
         ></ul>
     </div>
 
-    <div data-title="Menu" data-role="view" id="menu" data-layout="default" data-model="menuViewModel" data-init="initMenuView">
+    <div data-title="Menu" data-role="view" id="menu" data-layout="default" data-model="viewModel" data-show="showMenuView">
         <ul
             id="menuList"
             class="item-list"
             data-role="listview"
             data-template="menuTemplate"
-            data-bind="source: all"
+            data-bind="source: dataSource"
         ></ul>
     </div>
 
-    <div data-role="view" id="cart" data-layout="default" data-title="Cart" data-model="cartViewModel" data-show="showCartView">
-        <h2 id="total"></h2>
+    <div data-role="view" id="cart" data-layout="default" data-title="Cart" data-model="viewModel" data-show="showCartView">
+        <h2 id="total" data-bind="text: showTotal"></h2>
         <img src="content/images/sad.png" id="empty-icon">
         <a id="checkout" data-bind="click: checkout" class="red-button" href="#done" data-role="button">Checkout</a>
-        <ul id="cartList" class="item-list"
+        <ul id="cartList"
+            class="item-list"
             data-template="cartItemTemplate"
             data-bind="source: added"
             data-role="listview"
@@ -91,7 +93,7 @@
         </div>
     </div>
 
-    <div data-role="view" id="details" data-transition="slide" data-layout="default" data-model="detailViewModel" data-show="showDetailsView">
+    <div data-role="view" id="details" data-transition="slide" data-layout="default" data-model="viewModel" data-show="showDetailsView">
         <header data-role="header">
         <div data-role="navbar">
             <a data-role="backbutton" data-align="left">Back</a>
@@ -101,9 +103,9 @@
 
         <div data-role="content">
             <aside>
-            <img data-bind="srcPath: currentItem.image" /> <!-- src="content/images/200/#:image#" -->
-            <span class="price" data-bind="format: currentItem.price"></span></span>
-            <a data-role="button" data-bind="click: addToCart">Order</a>
+                <img data-bind="srcPath: currentItem.image" /> <!-- src="content/images/200/#:image#" -->
+                <span class="price" data-bind="format: currentItem.price"></span></span>
+                <a data-role="button" data-bind="click: addToCart">Order</a>
             </aside>
             <h2 data-bind="text: currentItem.name"></h2>
             <p data-bind="text: currentItem.description"></p>
@@ -136,8 +138,8 @@
             data-role="listview-link"
             href="\#details?id=#:id#">
             <img src="content/images/75/#:image#" />
-            <h2>#:name#</h2>
-            <span class="price">#:kendo.toString(price * data.ordered, "c")#</span>
+            <h2>#:name# (x #:ordered#)</h2>
+            <span class="price">total: #:kendo.toString(price * ordered, "c")#</span>
         </a>
     </script>
 

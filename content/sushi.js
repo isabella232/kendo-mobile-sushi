@@ -28,163 +28,125 @@
             }
         }
     });
-
-    var ds = new kendo.data.DataSource({
-        transport: { 
-            read: { 
-                url: "content/menu.json", 
-                dataType: "json" 
-            } 
-        }
-    });
-
-    //home view model
-    var homeViewModel = kendo.observable({
-        featured: [],
-        addToCart: addToCart,
-        init: function() {
-            var that = this;
-
-            ds.one("change", function() {
-                that.set("featured", this.view());
-            })
-            .filter({ field: "featured", operator: "eq", value: true});
-        }
-    });
-
-    //menu view model
-    var menuViewModel = kendo.observable({
-        all: new kendo.data.DataSource({
-            group: "category"
+    
+    //viewModel
+    var viewModel = kendo.observable({
+        dataSource: new kendo.data.DataSource({
+            transport: { 
+                read: { 
+                    url: "content/menu.json", 
+                    dataType: "json" 
+                } 
+            }
         }),
+        added: [],
+        currentItem: null,
         addToCart: addToCart,
-        init: function() {
-            var that = this;
-            ds.one("change", function() {
-                that.all.data(this.data().toJSON());
-            }).fetch();
-        }
+        removeItem: removeItem,
+        checkout: checkout,
+        showCheckout: showCheckout,
+        showLabel: showLabel,
+        showTotal: showTotal
     });
+
+    function showHomeView(e) {
+        viewModel.dataSource.group([]);
+        $("#featured").data("kendoMobileListView").options.type = "flat";
+        viewModel.dataSource.filter({ field: "featured", operator: "eq", value: true});
+    }
+
+    function showMenuView() {
+        viewModel.dataSource.filter([]);
+        viewModel.dataSource.group({field: "category"});
+    } 
+    
+    function showCartView() {
+        viewModel.showCheckout();
+    }
 
     function addToCart(e) {
-        var item = e.data,
-            ordered = item.get("ordered") || 0;
+        var item,
+            ordered;
 
+        if(e.data.id) {
+            item = e.data     
+        } else {
+            item = this.get("currentItem");
+        }
+
+        ordered = item.get("ordered") || 0;
         ordered += 1;
 
         item.set("ordered", ordered);
 
         if (ordered === 1) {
-            cartViewModel.added.add(item.toJSON());
+            this.added.push(item);
         }
 
         e.preventDefault();
     }
 
-    //cart view model
-    var cartViewModel = kendo.observable({
-        added: new kendo.data.DataSource(),
-        removeItem: function(e) {
-            var item = e.data,
-                currentView = app.view(),
-                featured = homeViewModel.get("featured"), //observable array
-                all = menuViewModel.all; //dataSource instance
+    function removeItem(e) {
+        var item = e.data,
+            index = viewModel.added.indexOf(item),
+            currentView = app.view();
 
-            //reset ordered numver in cart list
-            item.set("ordered", 0);
-            this.added.remove(item);
+        item.set("ordered", 0);
+        viewModel.added.splice(index, 1);
 
-            //reset ordered number in featured list
-            for(var i = 0; i < featured.length; i++) {
-                if(featured[i].id === item.id) {
-                    featured[i].set("ordered", 0);
-                }
-            }
-
-            //reset ordered numver in list of all products
-            all.get(item.id).set("ordered", 0);
-
-            currentView.scroller.reset();
-            e.preventDefault();
-        },
-        checkout: function() {
-            var dataSource = this.added,
-                items = dataSource.data(),
-                length = items.length,
-                idx = 0;
-
-            setTimeout(function () {
-                for (; idx < length; idx++) {
-                    items[0].set("ordered", 0);
-                }
-
-                dataSource.data([])
-            }, 400);
-        },
-        showCheckout: function() {
-            var button = $("#checkout");
-
-            if (this.added.data()[0]) {
-                button.show();
-            } else {
-                button.hide();
-            }
-        }
-    });
-
-    //detail view model
-    var detailViewModel = kendo.observable({
-        currentItem: null,
-        addToCart: function(e) {
-            var item = this.currentItem,
-                ordered = item.get("ordered") || 0;
-
-            ordered += 1;
-
-            item.set("ordered", ordered);
-
-            if (ordered === 1) {
-                cartViewModel.added.add(item.toJSON());
-            }
-
-            e.preventDefault();
-        },
-        showLabel: function() {
-            return this.get("currentItem") && this.get("currentItem").get("ordered") > 0;
-        }
-    });
-
-    function initHomeView() {
-        homeViewModel.init();
+        currentView.scroller.reset();
+        e.preventDefault();
     }
 
-    function initMenuView() {
-        menuViewModel.init();
+    function checkout(e) {
+        var that = this,
+            dataSourceData = this.dataSource.data(),
+            length = dataSourceData.length;
+
+        setTimeout(function () {
+            for (idx = 0; idx < length; idx++) {
+                dataSourceData[idx].set("ordered", 0);
+            }
+
+            that.set("added", []);
+        }, 400);
     }
 
-    function showCartView() {
-        cartViewModel.showCheckout();
+    function showCheckout(e) {
+        var button = $("#checkout");
+
+        if (this.added.length) {
+            button.show();
+        } else {
+            button.hide();
+        }
+    }
+    
+    function showLabel() {
+        return this.get("currentItem") && this.get("currentItem").get("ordered") > 0;
     }
 
     function showDetailsView(e) {
-        var view = e.view;
+        var id = parseInt(e.view.params.id),
+            item = viewModel.dataSource.get(id);
 
-        ds.fetch(function() {
-            var model = view.model,
-                item = ds.get(view.params.id);
+        viewModel.set("currentItem", item);
+    }
 
-            model.set("currentItem", item);
-        });
+    function showTotal() {
+        var cartItems = this.get("added"),
+            total = 0;
+        for(var idx = 0; idx < cartItems.length; idx++) {
+            total += cartItems[idx].ordered * cartItems[idx].price;
+        }
+        return kendo.toString(total, "c");
     }
 
     $.extend(window, {
-        homeViewModel: homeViewModel,
-        menuViewModel: menuViewModel,
-        cartViewModel: cartViewModel,
-        detailViewModel: detailViewModel,
-        initHomeView: initHomeView,
-        initMenuView: initMenuView,
+        showHomeView: showHomeView,
+        showMenuView: showMenuView,
         showCartView: showCartView,
-        showDetailsView: showDetailsView
+        showDetailsView: showDetailsView,
+        viewModel: viewModel 
     });
 })(jQuery);
