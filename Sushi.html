@@ -153,7 +153,11 @@
         var schema = {model: {}};
 
         var ds = new kendo.data.DataSource({
-            schema: schema,
+            schema: {
+				model:{
+					id: "id"
+				}
+			},
             transport: { 
 				read: { 
 					url: "content/menu.json", 
@@ -233,7 +237,8 @@
         }
 
         function showDetailsView(e) {
-            var view = e.view;
+            var view = e.view,
+				item;
 
             ds.fetch(function() {
                 item = ds.get(view.params.id);

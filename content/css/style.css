@@ -24,9 +24,9 @@
     margin-right: 1em;
     margin-right: 1rem;
     -webkit-box-shadow: 0 2px 3px #333;
-    box-shadow: 0 2px 3px #333;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 4rem;
+    border-radius: 4rem;
     margin-bottom: 3px;
     margin-left: 2px;
 }
@@ -131,8 +131,8 @@
 #details .km-content aside .price
 {
     display: block;
-    margin-bottom: 1em;
     margin-bottom: 1rem;
+	margin-top:30px;
 }
 
 .details-link
@@ -204,7 +204,7 @@
 #menu .item-list .km-button,
 #index .item-list .km-button
 {
-    width: 4.3em;
+    width: 4.2em;
     text-align: center;
 }
 
