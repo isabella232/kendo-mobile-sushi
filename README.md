@@ -1,6 +1,6 @@
 #Kendo Mobile Sushi demo
 
-Link to the demo: http://demos.kendoui.com/mobile/simulator/
+Link to the demo: http://demos.telerik.com/kendo-ui/mobile-apps/sushi
 
 ####This demo shows how to implement a Single Page Application demo. It has six different views:
 <ol>
